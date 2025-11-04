@@ -4,10 +4,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float ileriHiz = 10f; // Saniyede ne kadar ileri gideceği
 
-    // Update her karede bir çalışır
     void Update()
     {
-        // Karakteri Z ekseninde (ileri) sürekli hareket ettir
         transform.Translate(Vector3.forward * ileriHiz * Time.deltaTime);
     }
 }
