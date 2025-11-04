@@ -9,10 +9,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // 1. Sürekli ileri hareket
         transform.Translate(Vector3.forward * ileriHiz * Time.deltaTime);
 
-        // 2. Klavye Girdisi (Mobil için sonradan Input.GetTouch kullanırsın)
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             // Sola gitmek istiyor
@@ -22,23 +20,29 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
-            // Sağa gitmek istiyor
             hedefSerit++;
             if (hedefSerit > 2)
                 hedefSerit = 2;
         }
 
-        // 3. Gerçek Hareketi Hesapla
-        // Hedef X pozisyonunu hesapla
         float hedefX = (hedefSerit - 1) * seritMesafesi; // -2, 0, veya 2
 
-        // Mevcut pozisyonu al
         Vector3 mevcutPozisyon = transform.position;
 
-        // X pozisyonunu hedefe doğru yumuşakça kaydır (Lerp)
         mevcutPozisyon.x = Mathf.Lerp(mevcutPozisyon.x, hedefX, seritHizi * Time.deltaTime);
         
-        // Yeni pozisyonu uygula
         transform.position = mevcutPozisyon;
+    }
+}
+
+private void OnCollisionEnter(Collision collision)
+{
+    if (collision.gameObject.CompareTag("Engel"))
+    {
+        Debug.Log("OYUN BİTTİ!");
+        
+        Time.timeScale = 0f; 
+        
+
     }
 }
