@@ -1,0 +1,44 @@
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+    public float ileriHiz = 10f;
+    public float seritHizi = 15f; // Şerit değiştirme hızı
+    private int hedefSerit = 1; // 0=Sol, 1=Orta, 2=Sağ
+    public float seritMesafesi = 2f; // Şeritler arası mesafe
+
+    void Update()
+    {
+        // 1. Sürekli ileri hareket
+        transform.Translate(Vector3.forward * ileriHiz * Time.deltaTime);
+
+        // 2. Klavye Girdisi (Mobil için sonradan Input.GetTouch kullanırsın)
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            // Sola gitmek istiyor
+            hedefSerit--;
+            if (hedefSerit < 0)
+                hedefSerit = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            // Sağa gitmek istiyor
+            hedefSerit++;
+            if (hedefSerit > 2)
+                hedefSerit = 2;
+        }
+
+        // 3. Gerçek Hareketi Hesapla
+        // Hedef X pozisyonunu hesapla
+        float hedefX = (hedefSerit - 1) * seritMesafesi; // -2, 0, veya 2
+
+        // Mevcut pozisyonu al
+        Vector3 mevcutPozisyon = transform.position;
+
+        // X pozisyonunu hedefe doğru yumuşakça kaydır (Lerp)
+        mevcutPozisyon.x = Mathf.Lerp(mevcutPozisyon.x, hedefX, seritHizi * Time.deltaTime);
+        
+        // Yeni pozisyonu uygula
+        transform.position = mevcutPozisyon;
+    }
+}
